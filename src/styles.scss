@@ -1,0 +1,35 @@
+$white: #ffffff;
+
+$theme-colors: (
+    "light":      #fffad9,
+    "dark":       #5c2e55,
+    "primary":    #104c4b,
+    "secondary":  #0a8c7b,
+    "info":       #2eb68d,
+    "accent1":    #942f54,
+    "accent2":    #d35e5f,
+    "accent3":    #e2b58c,
+    "success":    #05ae4a,
+    "warning":    #f0c905,
+    "danger":     #f80234,
+);
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}  
+
+.card-container {
+  display: grid;
+  grid-auto-flow: row;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wheel-container {
+  display: flex;
+  justify-content: center;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
