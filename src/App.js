@@ -9,18 +9,16 @@ export default () => {
   const [hasStartedSpinning, setHasStartedSpinning] = useState(false);
   const [hasFinishedSpinning, setHasFinishedSpinning] = useState(false);
   const [data, setData] = useState(defaultData);
-
-  const [prizeNumber, setPrizeNumber] = useState(0);
+  const [title, setTitle] = useState('Loading');
+  const [outcome, setOutcome] = useState(0);
 
   const handleSpinClick = () => {
-    const newPrizeNumber = Math.floor(Math.random() * data.length);
-    setPrizeNumber(newPrizeNumber);
     setMustSpin(true);
     setHasStartedSpinning(true);
   };
 
   useEffect(() => {
-    console.log("This runs once on first render");
+    console.log("This runs once on first render - stella");
 
     const spinRef = window.location.href.split('/').reverse()[0];
 
@@ -29,9 +27,14 @@ export default () => {
     .then(
       (data) =>  {
         console.log(data)
-        const newData = data.wheel.items.map((e, i) => ({ id: i, option: e}));
-        console.log(newData);
+
+        const newData = data.data.wheels.items.map((e, i) => ({ id: i, option: e}));
+        const newTitle = data.data.wheels.title;
+        const newOutcome = data.data.outcome;
+
         setData(newData);
+        setTitle(newTitle);
+        setOutcome(newOutcome);
       });
 
   }, []);
@@ -42,7 +45,7 @@ export default () => {
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img src='https://cdn.pixabay.com/photo/2012/04/05/00/32/lemon-25342_960_720.png' alt="" width="30" height="24" />
-            <span> Signmeant</span>
+            <span>Treat Spin</span>
           </a>
         </div>
       </nav>
@@ -53,7 +56,7 @@ export default () => {
         <div className="card m-3">
 
             <div className="card-header">
-              Thurdays's Activity
+              { title }
             </div>
 
             {data === defaultData && 
@@ -62,7 +65,7 @@ export default () => {
                 <div className='m-3 wheel-container'> 
                   <Wheel
                     mustStartSpinning={mustSpin}
-                    prizeNumber={prizeNumber}  
+                    prizeNumber={outcome}  
                     data={data}
                     outerBorderColor={["#f2f2f2"]}
                     outerBorderWidth={[25]}
@@ -101,7 +104,7 @@ export default () => {
             }
 
             { hasStartedSpinning && hasFinishedSpinning &&
-              <h2 className='px-0'>Result: <span> {data[prizeNumber].option} </span> </h2>
+              <h2 className='px-0'>Result: <span> {data[outcome].option} </span> </h2>
             }
 
           </div>
