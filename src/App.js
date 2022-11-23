@@ -37,7 +37,7 @@ export default () => {
         setOutcome(newOutcome);
       });
 
-  }, []);
+      }, []);
 
   return (
     <>
@@ -80,9 +80,23 @@ export default () => {
                       "#d35e5f",
                       "#e2b58c"
                     ]}
-                    onStopSpinning={() => {
+                    onStopSpinning={ () => {
                       setMustSpin(false);
                       setHasFinishedSpinning(true);
+
+                      const spinRef = window.location.href.split('/').reverse()[0];
+
+                      fetch('http://localhost:3000/viewed/' + spinRef, {
+                        method: 'POST',
+                        headers: {
+                          'Accept': 'application/json, text/plain, */*',
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({a: 7, str: 'Some string: &=&'})
+                      })
+                      .then(res => res.json())
+                      .then(res => console.log(res));
+
                     }}
                 />
                </div>
