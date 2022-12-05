@@ -108,6 +108,7 @@ export default () => {
                         ["#942f54", "#d35e5f", "#e2b58c"]                      
                     }
                     onStopSpinning={ () => {
+
                       setMustSpin(false);
                       setHasFinishedSpinning(true);
 
