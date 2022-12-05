@@ -4,6 +4,26 @@ import Button from 'react-bootstrap/Button';
 
 const defaultData = [{ id: 1, option: "Loading.." }];
 
+const getColors = (length) => {
+  const colorMap = [
+    ["#942f54", "#d35e5f"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c", "#942f54"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c", "#942f54"],
+    ["#942f54", "#d35e5f", "#e2b58c"],
+    ["#942f54", "#d35e5f", "#e2b58c"]
+  ]
+
+  console.log(colorMap[length]);
+
+  return colorMap[length];
+};
+
 export default () => {
   const [mustSpin, setMustSpin] = useState(false);
   const [hasStartedSpinning, setHasStartedSpinning] = useState(false);
@@ -20,9 +40,13 @@ export default () => {
   useEffect(() => {
     console.log("This runs once on first render - stella");
 
-    const spinRef = window.location.href.split('/').reverse()[0];
+    //const spinRef = window.location.href.split('/').reverse()[0];
+    const urlParams = new URLSearchParams(window.location.search);
+    const spinRef = urlParams.get('sr');
 
-    fetch('http://localhost:3000/s/' + spinRef)
+    console.log(`spin ref: ${spinRef}`);
+
+    fetch('https://express.tastytoast.net/s/' + spinRef)
     .then((response) => response.json())
     .then(
       (data) =>  {
@@ -31,6 +55,8 @@ export default () => {
         const newData = data.data.wheels.items.map((e, i) => ({ id: i, option: e}));
         const newTitle = data.data.wheels.title;
         const newOutcome = data.data.outcome;
+
+        console.log(newData);
 
         setData(newData);
         setTitle(newTitle);
@@ -75,18 +101,20 @@ export default () => {
                     textColors={["#ffffff"]}
                     fontSize={[25]}
                     perpendicularText={[true]}
-                    backgroundColors={[
-                      "#942f54",
-                      "#d35e5f",
-                      "#e2b58c"
-                    ]}
+                    backgroundColors={
+                      (data.length % 3 === 1)  &&
+                        ["#942f54", "#d35e5f", "#e2b58c", "#d35e5f"]
+                      ||
+                        ["#942f54", "#d35e5f", "#e2b58c"]                      
+                    }
                     onStopSpinning={ () => {
                       setMustSpin(false);
                       setHasFinishedSpinning(true);
 
-                      const spinRef = window.location.href.split('/').reverse()[0];
+                      const urlParams = new URLSearchParams(window.location.search);
+                      const spinRef = urlParams.get('sr');
 
-                      fetch('http://localhost:3000/viewed/' + spinRef, {
+                      fetch('https://express.tastytoast.net/viewed/' + spinRef, {
                         method: 'POST',
                         headers: {
                           'Accept': 'application/json, text/plain, */*',
